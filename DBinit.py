@@ -44,6 +44,10 @@ def insertarDatos(con):
                           "VALUES ('%d','%s','%s','%s')" %
                           (int(empleado['id_emp']), empleado['nombre'], empleado['nivel'], empleado['fecha_contrato']))
     # Clientes
+    for cliente in clientes:
+        cursorObj.execute("INSERT OR IGNORE INTO Clientes(id_cli, nombre, telefono, provincia)"\
+                          "VALUES ('%d', '%s', '%d', '%s')" %
+                          (int(cliente['id_cli']), cliente['nombre'], int(cliente['telefono']), cliente['provincia']))
 
     # Tipos incidencias
 
