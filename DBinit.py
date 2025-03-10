@@ -4,7 +4,7 @@ def crear_tablas(con):
     cursorObj = con.cursor()
     cursorObj.execute("CREATE TABLE IF NOT EXISTS Empleados (id_emp INTEGER PRIMARY KEY, nombre text, nivel INTEGER, fecha_contrato DATE)")
     cursorObj.execute("CREATE TABLE IF NOT EXISTS Clientes (id_cli INTEGER PRIMARY KEY, nombre text, telefono INTEGER, provincia text)")
-    cursorObj.execute("CREATE TABLE IF NOT EXISTS Tipos_incidencias (id_inci INTEGER PRIMARY KEY, nombre text)")
+    cursorObj.execute("CREATE TABLE IF NOT EXISTS Tipos_Incidentes (id_inci INTEGER PRIMARY KEY, nombre text)")
     cursorObj.execute("CREATE TABLE IF NOT EXISTS Ticket_emitidos (id_tick INTEGER PRIMARY KEY, nombre text, fecha_apertura DATE, fecha_cierre DATE, es_mantenimiento text, satisfaccion_cliente INTEGER, tipo_incidencia INTEGER, FOREIGN KEY (tipo_incidencia) REFERENCES Tipos_incidentes(id_inci))")
     cursorObj.execute("CREATE TABLE IF NOT EXISTS Contactos_con_empleados (id_tick INTEGER, id_emp INTEGER, fecha DATE, tiempo INTEGER, PRIMARY KEY (id_tick, id_emp), FOREIGN KEY (id_tick) REFERENCES Ticket_emitidos(id_tick), FOREIGN KEY (id_emp) REFERENCES Empleado(id_emp))")
     con.commit()
@@ -44,8 +44,16 @@ def insertarDatos(con):
                           "VALUES ('%d','%s','%s','%s')" %
                           (int(empleado['id_emp']), empleado['nombre'], empleado['nivel'], empleado['fecha_contrato']))
     # Clientes
+    for cliente in clientes:
+        cursorObj.execute("INSERT OR IGNORE INTO Clientes(id_cli, nombre, telefono, provincia)" \
+                          "VALUES ('%d','%s','%d','%s')" %
+                          (int(cliente['id_cli']), cliente['nombre'], int(cliente['telefono']), cliente['provincia']))
 
-    # Tipos incidencias
+    # Tipos incidentes
+    for tipo_incidente in tipos_incidentes:
+        cursorObj.execute("INSERT OR IGNORE INTO Tipos_Incidentes(id_inci, nombre)" \
+                          "VALUES ('%d','%s')" %
+                          (int(tipo_incidente['id_inci']), tipo_incidente['nombre']))
 
     # tickets emitidos
 
