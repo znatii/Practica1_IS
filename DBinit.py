@@ -5,11 +5,9 @@ def crear_tablas(con):
     cursorObj.execute("CREATE TABLE IF NOT EXISTS Empleados (id_emp INTEGER PRIMARY KEY, nombre text, nivel INTEGER, fecha_contrato DATE)")
     cursorObj.execute("CREATE TABLE IF NOT EXISTS Clientes (id_cli INTEGER PRIMARY KEY, nombre text, telefono INTEGER, provincia text)")
     cursorObj.execute("CREATE TABLE IF NOT EXISTS Tipos_Incidentes (id_inci INTEGER PRIMARY KEY, nombre text)")
-    cursorObj.execute("CREATE TABLE IF NOT EXISTS Ticket_emitidos (id_tick INTEGER PRIMARY KEY, nombre text, fecha_apertura DATE, fecha_cierre DATE, es_mantenimiento text, satisfaccion_cliente INTEGER, tipo_incidencia INTEGER, FOREIGN KEY (tipo_incidencia) REFERENCES Tipos_incidentes(id_inci))")
-    cursorObj.execute("CREATE TABLE IF NOT EXISTS Contactos_con_empleados (id_tick INTEGER, id_emp INTEGER, fecha DATE, tiempo INTEGER, PRIMARY KEY (id_tick, id_emp), FOREIGN KEY (id_tick) REFERENCES Ticket_emitidos(id_tick), FOREIGN KEY (id_emp) REFERENCES Empleado(id_emp))")
+    cursorObj.execute("CREATE TABLE IF NOT EXISTS Tickets_emitidos (id_tick INTEGER PRIMARY KEY, cliente text, fecha_apertura DATE, fecha_cierre DATE, es_mantenimiento text, satisfaccion_cliente INTEGER, tipo_incidencia INTEGER, FOREIGN KEY (tipo_incidencia) REFERENCES Tipos_incidentes(id_inci))")
+    cursorObj.execute("CREATE TABLE IF NOT EXISTS Contactos_con_empleados (id_tick INTEGER, id_emp INTEGER, fecha DATE, tiempo INTEGER, PRIMARY KEY (id_tick, id_emp), FOREIGN KEY (id_tick) REFERENCES Tickets_emitidos(id_tick), FOREIGN KEY (id_emp) REFERENCES Empleado(id_emp))")
     con.commit()
-
-
 
 def insertarDatos(con):
     cursorObj = con.cursor()
@@ -27,6 +25,7 @@ def insertarDatos(con):
     id_tick = 1
     for ticket in tickets:
         contactos = ticket['contactos_con_empleados']
+        ticket['id_tick'] = id_tick
         for contacto in contactos:
             inp = {
                 'id_tick': id_tick,
@@ -57,8 +56,16 @@ def insertarDatos(con):
 
     # tickets emitidos
 
-    # Contactos con empleados
+    for ticket in tickets:
+        cursorObj.execute("INSERT OR IGNORE INTO Tickets_emitidos(id_tick, cliente, fecha_apertura, fecha_cierre, es_mantenimiento, satisfaccion_cliente, tipo_incidencia)" \
+                          "VALUES ('%d','%s','%s','%s','%s','%d','%d')" %
+                          (int(ticket['id_tick']), ticket['cliente'], ticket['fecha_apertura'], ticket['fecha_cierre'], ticket['es_mantenimiento'], int(ticket['satisfaccion_cliente']), int(ticket['tipo_incidencia'])))
 
+    # Contactos con empleados
+    for contacto in contactos_con_empleados:
+        cursorObj.execute("INSERT OR IGNORE INTO contactos_con_empleados(id_tick, id_emp, fecha, tiempo)" \
+                          "VALUES ('%d','%d','%s','%d')" %
+                          (int(contacto['id_tick']), int(contacto['id_emp']),contacto['fecha'],int(contacto['tiempo'])))
 
     con.commit()
 
