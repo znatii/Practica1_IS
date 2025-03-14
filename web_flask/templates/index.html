@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados de Análisis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .resultado {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Resultados del Análisis</h1>
+
+    <div class="resultado">
+        <strong>Número de muestras totales:</strong> {{ resultados.total_muestras }}
+    </div>
+
+    <div class="resultado">
+        <strong>Media de satisfacción (>= 5):</strong> {{ resultados.media_satisfaccion }}
+    </div>
+
+    <div class="resultado">
+        <strong>Desviación estándar de satisfacción (>= 5):</strong> {{ resultados.std_satisfaccion }}
+    </div>
+
+    <div class="resultado">
+        <strong>Media de incidentes por cliente:</strong> {{ resultados.media_incidentes_por_cliente }}
+    </div>
+
+    <div class="resultado">
+        <strong>Desviación estándar de incidentes por cliente:</strong> {{ resultados.std_incidentes_por_cliente }}
+    </div>
+
+    <div class="resultado">
+        <strong>Media de horas por incidente:</strong> {{ resultados.media_horas_por_incidente }}
+    </div>
+
+    <div class="resultado">
+        <strong>Desviación estándar de horas por incidente:</strong> {{ resultados.std_horas_por_incidente }}
+    </div>
+
+    <div class="resultado">
+        <strong>Mínimo de horas realizadas por empleados:</strong> {{ resultados.min_horas_empleados }}
+    </div>
+
+    <div class="resultado">
+        <strong>Máximo de horas realizadas por empleados:</strong> {{ resultados.max_horas_empleados }}
+    </div>
+
+    <div class="resultado">
+        <strong>Mínimo de horas entre apertura y cierre:</strong> {{ resultados.min_tiempo_apertura_cierre }}
+    </div>
+
+    <div class="resultado">
+        <strong>Máximo de horas entre apertura y cierre:</strong> {{ resultados.max_tiempo_apertura_cierre }}
+    </div>
+
+    <div class="resultado">
+        <strong>Mínimo de incidentes atendidos por empleado:</strong> {{ resultados.min_incidentes_por_empleado }}
+    </div>
+
+    <div class="resultado">
+        <strong>Máximo de incidentes atendidos por empleado:</strong> {{ resultados.max_incidentes_por_empleado }}
+    </div>
+</body>
+</html>
