@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 5 - Análisis de fraude</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .resultado {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .boton {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .boton:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<h1>Ejercicio 5 - Análisis de Fraude</h1>
+
+<h2>Datos Generales</h2>
+<p>Número total de incidentes de Fraude: {{ resultados.num_incidentes_fraude }}</p>
+<p>Número total de actuaciones en incidentes de Fraude: {{ resultados.num_actuaciones_fraude }}</p>
+
+<h2>Estadísticas de Tiempo Trabajado en Fraudes</h2>
+<ul>
+    <li>Mediana: {{ resultados.estadisticas_fraude.Mediana }}</li>
+    <li>Media: {{ resultados.estadisticas_fraude.Media }}</li>
+    <li>Varianza: {{ resultados.estadisticas_fraude.Varianza }}</li>
+    <li>Mínimo: {{ resultados.estadisticas_fraude.Mínimo }}</li>
+    <li>Máximo: {{ resultados.estadisticas_fraude.Máximo }}</li>
+</ul>
+
+<h2>Agrupaciones</h2>
+
+<h3>Por Empleado</h3>
+<ul>
+    {% for empleado, incidentes in resultados.fraude_por_empleado.items() %}
+    <li>Empleado {{ empleado }}: {{ incidentes }} incidentes</li>
+    {% endfor %}
+</ul>
+
+<h3>Por Nivel de Empleado</h3>
+<ul>
+    {% for nivel, incidentes in resultados.fraude_nivel_empleado.items() %}
+    <li>Nivel {{ nivel }}: {{ incidentes }} incidentes</li>
+    {% endfor %}
+</ul>
+
+<h3>Por Cliente</h3>
+<ul>
+    {% for cliente, incidentes in resultados.fraude_por_cliente.items() %}
+    <li>Cliente {{ cliente }}: {{ incidentes }} incidentes</li>
+    {% endfor %}
+</ul>
+
+<h3>Por Día de la Semana</h3>
+<ul>
+    {% for dia, incidentes in resultados.fraude_por_dia.items() %}
+    <li>{{ dia }}: {{ incidentes }} incidentes</li>
+    {% endfor %}
+</ul>
+<a href="/" class="boton">Volver al Inicio</a>
+</body>
+</html>
