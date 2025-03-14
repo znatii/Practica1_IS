@@ -126,55 +126,82 @@ def obtener_resultados_ejercicio_5():
 
     tickets_df["fecha_apertura"] = pd.to_datetime(tickets_df["fecha_apertura"])
     tickets_df["fecha_cierre"] = pd.to_datetime(tickets_df["fecha_cierre"])
-
     tickets_df["dia_semana"] = tickets_df["fecha_apertura"].dt.day_name()
 
-    # Filtrar incidentes de tipo fraude
     id_fraude = tipos_incidentes_df[tipos_incidentes_df["nombre"] == "Fraude"]["id_inci"].values[0]
     fraude_tickets = tickets_df[tickets_df["tipo_incidencia"] == id_fraude]
 
-    #  contactos asociados a fraudes
+    # Obtener contactos asociados a fraudes
     fraude_contactos = contactos_df[contactos_df["id_tick"].isin(fraude_tickets["id_tick"])]
 
-    # total de incidentes de Fraude
-    num_incidentes_fraude = len(fraude_tickets)
+    # calcular estadísticas
+    def calcular_estadisticas(df, columna):
+        return {
+            "Mediana": df[columna].median(),
+            "Media": df[columna].mean(),
+            "Varianza": df[columna].var(),
+            "Minimo": df[columna].min(),
+            "Maximo": df[columna].max(),
+        }
 
-    #  actuaciones realizadas por empleados en incidentes de Fraude
-    num_actuaciones_fraude = len(fraude_contactos)
+    # Agrupación por empleado
+    fraude_por_empleado = fraude_contactos.groupby("id_emp").agg(
+        num_incidentes=("id_tick", "nunique"),
+        num_actuaciones=("id_tick", "count"),
+        tiempo_total=("tiempo", "sum")
+    ).reset_index()
 
-    #Análisis estadístico básico de tiempo trabajado en fraudes
-    fraude_contactos["tiempo"] = fraude_contactos["tiempo"].fillna(0)
-    horas_trabajadas_fraude = fraude_contactos.groupby("id_tick")["tiempo"].sum()
-    estadisticas_fraude = {
-        "Mediana": horas_trabajadas_fraude.median(),
-        "Media": horas_trabajadas_fraude.mean(),
-        "Varianza": horas_trabajadas_fraude.var(),
-        "Mínimo": horas_trabajadas_fraude.min(),
-        "Máximo": horas_trabajadas_fraude.max(),
-    }
 
-    # Agrupaciones
-    # Por empleado
-    fraude_por_empleado = fraude_contactos.groupby("id_emp")["id_tick"].nunique().to_dict()
+    # Agrupación por nivel de empleado
+    fraude_nivel_empleado = fraude_contactos.merge(empleados_df, on="id_emp").groupby("nivel").agg(
+        num_incidentes=("id_tick", "nunique"),
+        num_actuaciones=("id_tick", "count"),
+        tiempo_total=("tiempo", "sum")
+    ).reset_index()
 
-    # Por nivel de empleado
-    fraude_nivel_empleado = fraude_contactos.merge(empleados_df, on="id_emp").groupby("nivel")["id_tick"].nunique().to_dict()
+    # Agrupación por cliente
+    fraude_por_cliente = fraude_tickets.groupby("cliente").agg(
+        num_incidentes=("id_tick", "nunique"),
+        num_actuaciones=("id_tick", "count")
+    ).reset_index()
 
-    # Por cliente
-    fraude_por_cliente = fraude_tickets.groupby("cliente")["id_tick"].count().to_dict()
 
-    # Por día de la semana
-    fraude_por_dia = fraude_tickets.groupby("dia_semana")["id_tick"].count().to_dict()
+    # Agrupación por tipo de incidente (solo fraude en este caso)
+    fraude_por_tipo = fraude_tickets.groupby("tipo_incidencia").agg(
+        num_incidentes=("id_tick", "nunique"),
+        num_actuaciones=("id_tick", "count")
+    ).reset_index()
+
+
+    # Agrupación por día de la semana
+    fraude_por_dia = fraude_tickets.groupby("dia_semana").agg(
+        num_incidentes=("id_tick", "nunique"),
+        num_actuaciones=("id_tick", "count")
+    ).reset_index()
+
 
     con.close()
     return {
-        'num_incidentes_fraude': num_incidentes_fraude,
-        'num_actuaciones_fraude': num_actuaciones_fraude,
-        'estadisticas_fraude': estadisticas_fraude,
-        'fraude_por_empleado': fraude_por_empleado,
-        'fraude_nivel_empleado': fraude_nivel_empleado,
-        'fraude_por_cliente': fraude_por_cliente,
-        'fraude_por_dia': fraude_por_dia,
+        'por_empleado': {
+            'datos': fraude_por_empleado.to_dict('records'),
+            'estadisticas': calcular_estadisticas(fraude_por_empleado, "tiempo_total")
+        },
+        'por_nivel_empleado': {
+            'datos': fraude_nivel_empleado.to_dict('records'),
+            'estadisticas': calcular_estadisticas(fraude_nivel_empleado, "tiempo_total")
+        },
+        'por_cliente': {
+            'datos': fraude_por_cliente.to_dict('records'),
+            'estadisticas': calcular_estadisticas(fraude_por_cliente, "num_actuaciones")
+        },
+        'por_tipo_incidente': {
+            'datos': fraude_por_tipo.to_dict('records'),
+            'estadisticas': calcular_estadisticas(fraude_por_tipo, "num_actuaciones")
+        },
+        'por_dia_semana': {
+            'datos': fraude_por_dia.to_dict('records'),
+            'estadisticas': calcular_estadisticas(fraude_por_dia, "num_actuaciones")
+        }
     }
 
 
