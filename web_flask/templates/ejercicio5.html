@@ -2,81 +2,133 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ejercicio 5 - Análisis de fraude</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        h1 {
-            color: #333;
-        }
-        .resultado {
-            background-color: #f9f9f9;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .boton {
-            display: inline-block;
-            padding: 10px 20px;
-            margin: 10px;
-            background-color: #007BFF;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-        .boton:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <title>Ejercicio 5</title>
 </head>
 <body>
-<h1>Ejercicio 5 - Análisis de Fraude</h1>
+<h1>Resultados del Ejercicio 5- Analisis de Fraude</h1>
 
-<h2>Datos Generales</h2>
-<p>Número total de incidentes de Fraude: {{ resultados.num_incidentes_fraude }}</p>
-<p>Número total de actuaciones en incidentes de Fraude: {{ resultados.num_actuaciones_fraude }}</p>
-
-<h2>Estadísticas de Tiempo Trabajado en Fraudes</h2>
+<h2>Por Empleado</h2>
+<table border="1">
+    <tr>
+        <th>ID Empleado</th>
+        <th>Número de Incidentes</th>
+        <th>Número de Actuaciones</th>
+        <th>Tiempo Total</th>
+    </tr>
+    {% for empleado in resultados.por_empleado.datos %}
+        <tr>
+            <td>{{ empleado.id_emp }}</td>
+            <td>{{ empleado.num_incidentes }}</td>
+            <td>{{ empleado.num_actuaciones }}</td>
+            <td>{{ empleado.tiempo_total }}</td>
+        </tr>
+    {% endfor %}
+</table>
+<h3>Estadísticas del Tiempo Total</h3>
 <ul>
-    <li>Mediana: {{ resultados.estadisticas_fraude.Mediana }}</li>
-    <li>Media: {{ resultados.estadisticas_fraude.Media }}</li>
-    <li>Varianza: {{ resultados.estadisticas_fraude.Varianza }}</li>
-    <li>Mínimo: {{ resultados.estadisticas_fraude.Mínimo }}</li>
-    <li>Máximo: {{ resultados.estadisticas_fraude.Máximo }}</li>
+    <li>Mediana: {{ resultados.por_empleado.estadisticas.Mediana }}</li>
+    <li>Media: {{ resultados.por_empleado.estadisticas.Media }}</li>
+    <li>Varianza: {{ resultados.por_empleado.estadisticas.Varianza }}</li>
+    <li>Mínimo: {{ resultados.por_empleado.estadisticas.Minimo }}</li>
+    <li>Máximo: {{ resultados.por_empleado.estadisticas.Maximo }}</li>
 </ul>
 
-<h2>Agrupaciones</h2>
-
-<h3>Por Empleado</h3>
-<ul>
-    {% for empleado, incidentes in resultados.fraude_por_empleado.items() %}
-    <li>Empleado {{ empleado }}: {{ incidentes }} incidentes</li>
+<h2>Por Nivel de Empleado</h2>
+<table border="1">
+    <tr>
+        <th>Nivel</th>
+        <th>Número de Incidentes</th>
+        <th>Número de Actuaciones</th>
+        <th>Tiempo Total</th>
+    </tr>
+    {% for nivel in resultados.por_nivel_empleado.datos %}
+        <tr>
+            <td>{{ nivel.nivel }}</td>
+            <td>{{ nivel.num_incidentes }}</td>
+            <td>{{ nivel.num_actuaciones }}</td>
+            <td>{{ nivel.tiempo_total }}</td>
+        </tr>
     {% endfor %}
+</table>
+<h3>Estadísticas del Tiempo Total</h3>
+<ul>
+    <li>Mediana: {{ resultados.por_nivel_empleado.estadisticas.Mediana }}</li>
+    <li>Media: {{ resultados.por_nivel_empleado.estadisticas.Media }}</li>
+    <li>Varianza: {{ resultados.por_nivel_empleado.estadisticas.Varianza }}</li>
+    <li>Mínimo: {{ resultados.por_nivel_empleado.estadisticas.Minimo }}</li>
+    <li>Máximo: {{ resultados.por_nivel_empleado.estadisticas.Maximo }}</li>
 </ul>
 
-<h3>Por Nivel de Empleado</h3>
-<ul>
-    {% for nivel, incidentes in resultados.fraude_nivel_empleado.items() %}
-    <li>Nivel {{ nivel }}: {{ incidentes }} incidentes</li>
+<h2>Por Cliente</h2>
+<table border="1">
+    <tr>
+        <th>Cliente</th>
+        <th>Número de Incidentes</th>
+        <th>Número de Actuaciones</th>
+    </tr>
+    {% for cliente in resultados.por_cliente.datos %}
+        <tr>
+            <td>{{ cliente.cliente }}</td>
+            <td>{{ cliente.num_incidentes }}</td>
+            <td>{{ cliente.num_actuaciones }}</td>
+        </tr>
     {% endfor %}
+</table>
+<h3>Estadísticas del Número de Actuaciones</h3>
+<ul>
+    <li>Mediana: {{ resultados.por_cliente.estadisticas.Mediana }}</li>
+    <li>Media: {{ resultados.por_cliente.estadisticas.Media }}</li>
+    <li>Varianza: {{ resultados.por_cliente.estadisticas.Varianza }}</li>
+    <li>Mínimo: {{ resultados.por_cliente.estadisticas.Minimo }}</li>
+    <li>Máximo: {{ resultados.por_cliente.estadisticas.Maximo }}</li>
 </ul>
 
-<h3>Por Cliente</h3>
-<ul>
-    {% for cliente, incidentes in resultados.fraude_por_cliente.items() %}
-    <li>Cliente {{ cliente }}: {{ incidentes }} incidentes</li>
+<h2>Por Tipo de Incidente</h2>
+<table border="1">
+    <tr>
+        <th>Tipo de Incidente</th>
+        <th>Número de Incidentes</th>
+        <th>Número de Actuaciones</th>
+    </tr>
+    {% for tipo in resultados.por_tipo_incidente.datos %}
+        <tr>
+            <td>{{ tipo.tipo_incidencia }}</td>
+            <td>{{ tipo.num_incidentes }}</td>
+            <td>{{ tipo.num_actuaciones }}</td>
+        </tr>
     {% endfor %}
+</table>
+<h3>Estadísticas del Número de Actuaciones</h3>
+<ul>
+    <li>Mediana: {{ resultados.por_tipo_incidente.estadisticas.Mediana }}</li>
+    <li>Media: {{ resultados.por_tipo_incidente.estadisticas.Media }}</li>
+    <li>Varianza: {{ resultados.por_tipo_incidente.estadisticas.Varianza }}</li>
+    <li>Mínimo: {{ resultados.por_tipo_incidente.estadisticas.Minimo }}</li>
+    <li>Máximo: {{ resultados.por_tipo_incidente.estadisticas.Maximo }}</li>
 </ul>
 
-<h3>Por Día de la Semana</h3>
-<ul>
-    {% for dia, incidentes in resultados.fraude_por_dia.items() %}
-    <li>{{ dia }}: {{ incidentes }} incidentes</li>
+<h2>Por Día de la Semana</h2>
+<table border="1">
+    <tr>
+        <th>Día de la Semana</th>
+        <th>Número de Incidentes</th>
+        <th>Número de Actuaciones</th>
+    </tr>
+    {% for dia in resultados.por_dia_semana.datos %}
+        <tr>
+            <td>{{ dia.dia_semana }}</td>
+            <td>{{ dia.num_incidentes }}</td>
+            <td>{{ dia.num_actuaciones }}</td>
+        </tr>
     {% endfor %}
+</table>
+<h3>Estadísticas del Número de Actuaciones</h3>
+<ul>
+    <li>Mediana: {{ resultados.por_dia_semana.estadisticas.Mediana }}</li>
+    <li>Media: {{ resultados.por_dia_semana.estadisticas.Media }}</li>
+    <li>Varianza: {{ resultados.por_dia_semana.estadisticas.Varianza }}</li>
+    <li>Mínimo: {{ resultados.por_dia_semana.estadisticas.Minimo }}</li>
+    <li>Máximo: {{ resultados.por_dia_semana.estadisticas.Maximo }}</li>
 </ul>
 <a href="/" class="boton">Volver al Inicio</a>
 </body>
