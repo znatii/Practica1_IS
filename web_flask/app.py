@@ -3,7 +3,6 @@ import pandas as pd
 import sqlite3
 from datetime import datetime
 
-# Crear la aplicación Flask
 app = Flask(__name__)
 
 # Conexión a la base de datos
@@ -13,14 +12,13 @@ DATABASE = 'ejercicio2.db'
 def obtener_resultados_ejercicio_4():
     con = sqlite3.connect(DATABASE)
 
-    # 1. Número de muestras totales
+    # muestras totales
     query_muestras_totales = "SELECT COUNT(*) AS total_muestras FROM Tickets_emitidos;"
     df_muestras_totales = pd.read_sql_query(query_muestras_totales, con)
     total_muestras = df_muestras_totales['total_muestras'].iloc[0]
 
-    # 2. Media y desviación estándar de los valores de satisfacción >= 5
-    query_satisfaccion = """
-        SELECT 
+    #Media y desviación estándar de los valores de satisfacción >= 5
+    query_satisfaccion = """ SELECT 
             satisfaccion_cliente
         FROM 
             Tickets_emitidos
@@ -31,7 +29,7 @@ def obtener_resultados_ejercicio_4():
     media_satisfaccion = df_satisfaccion['satisfaccion_cliente'].mean()
     std_satisfaccion = df_satisfaccion['satisfaccion_cliente'].std()
 
-    # 3. Media y desviación estándar del número de incidentes por cliente
+    # Media y desviación estándar del número de incidentes por cliente
     query_incidentes_por_cliente = """
         SELECT 
             cliente, 
@@ -45,7 +43,7 @@ def obtener_resultados_ejercicio_4():
     media_incidentes_por_cliente = df_incidentes_por_cliente['total_incidentes'].mean()
     std_incidentes_por_cliente = df_incidentes_por_cliente['total_incidentes'].std()
 
-    # 4. Media y desviación estándar del número de horas totales realizadas en cada incidente
+    # Media y desviación estándar del número de horas totales realizadas en cada incidente
     query_horas_por_incidente = """
         SELECT 
             id_tick, 
@@ -59,7 +57,7 @@ def obtener_resultados_ejercicio_4():
     media_horas_por_incidente = df_horas_por_incidente['total_horas'].mean()
     std_horas_por_incidente = df_horas_por_incidente['total_horas'].std()
 
-    # 5. Valor mínimo y máximo del total de horas realizadas por los empleados
+    #  Valor mínimo y máximo del total de horas realizadas por los empleados
     query_horas_empleados = """
         SELECT 
             id_emp, 
@@ -73,7 +71,7 @@ def obtener_resultados_ejercicio_4():
     min_horas_empleados = df_horas_empleados['total_horas'].min()
     max_horas_empleados = df_horas_empleados['total_horas'].max()
 
-    # 6. Valor mínimo y máximo del tiempo entre apertura y cierre de incidente
+    # Valor mínimo y máximo del tiempo entre apertura y cierre de incidente
     query_tiempo_apertura_cierre = """
         SELECT 
             id_tick, 
@@ -85,7 +83,7 @@ def obtener_resultados_ejercicio_4():
     min_tiempo_apertura_cierre = df_tiempo_apertura_cierre['horas_entre_apertura_cierre'].min()
     max_tiempo_apertura_cierre = df_tiempo_apertura_cierre['horas_entre_apertura_cierre'].max()
 
-    # 7. Valor mínimo y máximo del número de incidentes atendidos por cada empleado
+    # Valor mínimo y máximo del número de incidentes atendidos por cada empleado
     query_incidentes_por_empleado = """
         SELECT 
             id_emp, 
@@ -99,10 +97,8 @@ def obtener_resultados_ejercicio_4():
     min_incidentes_por_empleado = df_incidentes_por_empleado['total_incidentes'].min()
     max_incidentes_por_empleado = df_incidentes_por_empleado['total_incidentes'].max()
 
-    # Cerrar la conexión a la base de datos
     con.close()
 
-    # Devolver los resultados
     return {
         'total_muestras': total_muestras,
         'media_satisfaccion': media_satisfaccion,
@@ -119,16 +115,72 @@ def obtener_resultados_ejercicio_4():
         'max_incidentes_por_empleado': max_incidentes_por_empleado,
     }
 
-# Función para el Ejercicio 2 (placeholder)
+
 def obtener_resultados_ejercicio_5():
-    # Aquí implementarás la lógica para el Ejercicio 2
-    return {
-        'mensaje': 'Resultados del Ejercicio 5 (pendiente de implementación).'
+    con = sqlite3.connect(DATABASE)
+
+    tickets_df = pd.read_sql_query("SELECT * FROM Tickets_Emitidos", con)
+    contactos_df = pd.read_sql_query("SELECT * FROM Contactos_Con_Empleados", con)
+    empleados_df = pd.read_sql_query("SELECT * FROM Empleados", con)
+    tipos_incidentes_df = pd.read_sql_query("SELECT * FROM Tipos_Incidentes", con)
+
+    tickets_df["fecha_apertura"] = pd.to_datetime(tickets_df["fecha_apertura"])
+    tickets_df["fecha_cierre"] = pd.to_datetime(tickets_df["fecha_cierre"])
+
+    tickets_df["dia_semana"] = tickets_df["fecha_apertura"].dt.day_name()
+
+    # Filtrar incidentes de tipo fraude
+    id_fraude = tipos_incidentes_df[tipos_incidentes_df["nombre"] == "Fraude"]["id_inci"].values[0]
+    fraude_tickets = tickets_df[tickets_df["tipo_incidencia"] == id_fraude]
+
+    #  contactos asociados a fraudes
+    fraude_contactos = contactos_df[contactos_df["id_tick"].isin(fraude_tickets["id_tick"])]
+
+    # total de incidentes de Fraude
+    num_incidentes_fraude = len(fraude_tickets)
+
+    #  actuaciones realizadas por empleados en incidentes de Fraude
+    num_actuaciones_fraude = len(fraude_contactos)
+
+    #Análisis estadístico básico de tiempo trabajado en fraudes
+    fraude_contactos["tiempo"] = fraude_contactos["tiempo"].fillna(0)
+    horas_trabajadas_fraude = fraude_contactos.groupby("id_tick")["tiempo"].sum()
+    estadisticas_fraude = {
+        "Mediana": horas_trabajadas_fraude.median(),
+        "Media": horas_trabajadas_fraude.mean(),
+        "Varianza": horas_trabajadas_fraude.var(),
+        "Mínimo": horas_trabajadas_fraude.min(),
+        "Máximo": horas_trabajadas_fraude.max(),
     }
 
-# Función para el Ejercicio 3 (placeholder)
+    # Agrupaciones
+    # Por empleado
+    fraude_por_empleado = fraude_contactos.groupby("id_emp")["id_tick"].nunique().to_dict()
+
+    # Por nivel de empleado
+    fraude_nivel_empleado = fraude_contactos.merge(empleados_df, on="id_emp").groupby("nivel")["id_tick"].nunique().to_dict()
+
+    # Por cliente
+    fraude_por_cliente = fraude_tickets.groupby("cliente")["id_tick"].count().to_dict()
+
+    # Por día de la semana
+    fraude_por_dia = fraude_tickets.groupby("dia_semana")["id_tick"].count().to_dict()
+
+    con.close()
+    return {
+        'num_incidentes_fraude': num_incidentes_fraude,
+        'num_actuaciones_fraude': num_actuaciones_fraude,
+        'estadisticas_fraude': estadisticas_fraude,
+        'fraude_por_empleado': fraude_por_empleado,
+        'fraude_nivel_empleado': fraude_nivel_empleado,
+        'fraude_por_cliente': fraude_por_cliente,
+        'fraude_por_dia': fraude_por_dia,
+    }
+
+
+
 def obtener_resultados_ejercicio_6():
-    # Aquí implementarás la lógica para el Ejercicio 3
+    # Aquí implementarás la lógica para el Ejercicio 6
     return {
         'mensaje': 'Resultados del Ejercicio 6 (pendiente de implementación).'
     }
@@ -138,19 +190,19 @@ def obtener_resultados_ejercicio_6():
 def index():
     return render_template('index.html')
 
-# Ruta para el Ejercicio 1
+# Ruta para el Ejercicio 4
 @app.route('/ejercicio4')
 def ejercicio1():
     resultados = obtener_resultados_ejercicio_4()
     return render_template('ejercicio4.html', resultados=resultados)
 
-# Ruta para el Ejercicio 2
+# Ruta para el Ejercicio 5
 @app.route('/ejercicio5')
 def ejercicio2():
     resultados = obtener_resultados_ejercicio_5()
     return render_template('ejercicio5.html', resultados=resultados)
 
-# Ruta para el Ejercicio 3
+# Ruta para el Ejercicio 6
 @app.route('/ejercicio6')
 def ejercicio3():
     resultados = obtener_resultados_ejercicio_6()
