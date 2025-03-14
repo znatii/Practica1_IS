@@ -9,8 +9,8 @@ app = Flask(__name__)
 # Conexión a la base de datos
 DATABASE = 'ejercicio2.db'
 
-# Función para ejecutar las consultas de pandas
-def obtener_resultados():
+# Función para el Ejercicio 4
+def obtener_resultados_ejercicio_4():
     con = sqlite3.connect(DATABASE)
 
     # 1. Número de muestras totales
@@ -119,14 +119,42 @@ def obtener_resultados():
         'max_incidentes_por_empleado': max_incidentes_por_empleado,
     }
 
+# Función para el Ejercicio 2 (placeholder)
+def obtener_resultados_ejercicio_5():
+    # Aquí implementarás la lógica para el Ejercicio 2
+    return {
+        'mensaje': 'Resultados del Ejercicio 5 (pendiente de implementación).'
+    }
+
+# Función para el Ejercicio 3 (placeholder)
+def obtener_resultados_ejercicio_6():
+    # Aquí implementarás la lógica para el Ejercicio 3
+    return {
+        'mensaje': 'Resultados del Ejercicio 6 (pendiente de implementación).'
+    }
+
 # Ruta principal
 @app.route('/')
 def index():
-    # Obtener los resultados
-    resultados = obtener_resultados()
+    return render_template('index.html')
 
-    # Renderizar la plantilla HTML con los resultados
-    return render_template('index.html', resultados=resultados)
+# Ruta para el Ejercicio 1
+@app.route('/ejercicio4')
+def ejercicio1():
+    resultados = obtener_resultados_ejercicio_4()
+    return render_template('ejercicio4.html', resultados=resultados)
+
+# Ruta para el Ejercicio 2
+@app.route('/ejercicio5')
+def ejercicio2():
+    resultados = obtener_resultados_ejercicio_5()
+    return render_template('ejercicio5.html', resultados=resultados)
+
+# Ruta para el Ejercicio 3
+@app.route('/ejercicio6')
+def ejercicio3():
+    resultados = obtener_resultados_ejercicio_6()
+    return render_template('ejercicio6.html', resultados=resultados)
 
 # Ejecutar la aplicación
 if __name__ == '__main__':
