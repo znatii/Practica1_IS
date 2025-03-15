@@ -7,7 +7,6 @@
     <list default="true" id="73fc1607-8ae5-4e89-96a1-e6c8a1ba2f7b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web_flask/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_flask/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_flask/templates/ejercicio5.html" beforeDir="false" afterPath="$PROJECT_DIR$/web_flask/templates/ejercicio5.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -189,6 +188,11 @@
       <workItem from="1741961318844" duration="677000" />
       <workItem from="1741967688853" duration="609000" />
       <workItem from="1741968446085" duration="2189000" />
+      <workItem from="1741971080135" duration="753000" />
+      <workItem from="1741985165708" duration="14000" />
+      <workItem from="1741985188123" duration="160000" />
+      <workItem from="1742035807942" duration="1112000" />
+      <workItem from="1742054413376" duration="642000" />
     </task>
     <servers />
   </component>
@@ -196,7 +200,7 @@
     <option name="version" value="3" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Practica1_IS$app.coverage" NAME="app Coverage Results" MODIFIED="1741970614025" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_flask" />
+    <SUITE FILE_PATH="coverage/Practica1_IS$app.coverage" NAME="app Coverage Results" MODIFIED="1742055054073" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_flask" />
     <SUITE FILE_PATH="coverage/Practica1_IS$DBinit.coverage" NAME="DBinit Coverage Results" MODIFIED="1741893774675" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

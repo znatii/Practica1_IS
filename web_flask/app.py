@@ -161,12 +161,22 @@ def obtener_resultados_ejercicio_5():
 
     # Agrupación por cliente
     fraude_por_cliente = fraude_tickets.groupby("cliente").agg(
-        num_incidentes=("id_tick", "nunique"),
-        num_actuaciones=("id_tick", "count")
+        num_incidentes=("id_tick", "nunique"),  # Número de incidentes únicos
     ).reset_index()
 
+    # Calcular el número de actuaciones (contactos) por cliente
+    actuaciones_por_cliente = fraude_contactos.groupby("id_tick")["id_emp"].count().reset_index()
+    actuaciones_por_cliente = actuaciones_por_cliente.rename(columns={"id_emp": "num_actuaciones"})
 
-    # Agrupación por tipo de incidente (solo fraude en este caso)
+    # Combinar con los datos de fraude_por_cliente
+    fraude_por_cliente = fraude_por_cliente.merge(
+        fraude_tickets[["id_tick", "cliente"]].merge(actuaciones_por_cliente, on="id_tick")
+        .groupby("cliente")["num_actuaciones"].sum().reset_index(),
+        on="cliente"
+    )
+
+
+    # Agrupación por tipo de incidente
     fraude_por_tipo = fraude_tickets.groupby("tipo_incidencia").agg(
         num_incidentes=("id_tick", "nunique"),
         num_actuaciones=("id_tick", "count")
@@ -175,9 +185,19 @@ def obtener_resultados_ejercicio_5():
 
     # Agrupación por día de la semana
     fraude_por_dia = fraude_tickets.groupby("dia_semana").agg(
-        num_incidentes=("id_tick", "nunique"),
-        num_actuaciones=("id_tick", "count")
+        num_incidentes=("id_tick", "nunique"),  # Número de incidentes únicos
     ).reset_index()
+
+    # Calcular el número de actuaciones (contactos) por día de la semana
+    actuaciones_por_dia = fraude_contactos.groupby("id_tick")["id_emp"].count().reset_index()
+    actuaciones_por_dia = actuaciones_por_dia.rename(columns={"id_emp": "num_actuaciones"})
+
+    # Combinar con los datos de fraude_por_dia
+    fraude_por_dia = fraude_por_dia.merge(
+        fraude_tickets[["id_tick", "dia_semana"]].merge(actuaciones_por_dia, on="id_tick")
+        .groupby("dia_semana")["num_actuaciones"].sum().reset_index(),
+        on="dia_semana"
+)
 
 
     con.close()
