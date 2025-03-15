@@ -178,9 +178,19 @@ def obtener_resultados_ejercicio_5():
 
     # Agrupación por tipo de incidente
     fraude_por_tipo = fraude_tickets.groupby("tipo_incidencia").agg(
-        num_incidentes=("id_tick", "nunique"),
-        num_actuaciones=("id_tick", "count")
+        num_incidentes=("id_tick", "nunique"),  # Número de incidentes únicos
     ).reset_index()
+
+    # Calcular el número de actuaciones (contactos) por tipo de incidente
+    actuaciones_por_tipo = fraude_contactos.groupby("id_tick")["id_emp"].count().reset_index()
+    actuaciones_por_tipo = actuaciones_por_tipo.rename(columns={"id_emp": "num_actuaciones"})
+
+    # Combinar con los datos de fraude_por_tipo
+    fraude_por_tipo = fraude_por_tipo.merge(
+        fraude_tickets[["id_tick", "tipo_incidencia"]].merge(actuaciones_por_tipo, on="id_tick")
+        .groupby("tipo_incidencia")["num_actuaciones"].sum().reset_index(),
+        on="tipo_incidencia"
+    )
 
 
     # Agrupación por día de la semana
