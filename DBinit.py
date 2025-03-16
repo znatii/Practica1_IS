@@ -19,11 +19,14 @@ def insertarDatos(con):
     clientes = datos['clientes']
     empleados = datos['empleados']
     tipos_incidentes = datos['tipos_incidentes']
-    contactos_con_empleados = []
+
 
     # Tabla auxiliar
+    contactos_con_empleados = []
     id_tick = 1
     for ticket in tickets:
+        # Iteramos en los objetos contactos_con_empleados
+        # de cada ticket y añadimos el id_tick
         contactos = ticket['contactos_con_empleados']
         ticket['id_tick'] = id_tick
         for contacto in contactos:

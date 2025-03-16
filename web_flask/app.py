@@ -1,9 +1,11 @@
 from flask import Flask, render_template
 import pandas as pd
 import sqlite3
-from datetime import datetime
+import matplotlib
+matplotlib.use('Agg')  # para evitar errores en Flask
 
-app = Flask(__name__)
+import ejercicio6.functions as e6
+app = Flask(__name__, static_folder='img', static_url_path='/img')
 
 # Conexión a la base de datos
 DATABASE = 'ejercicio2.db'
@@ -235,12 +237,16 @@ def obtener_resultados_ejercicio_5():
     }
 
 
-
 def obtener_resultados_ejercicio_6():
-    # Aquí implementarás la lógica para el Ejercicio 6
-    return {
-        'mensaje': 'Resultados del Ejercicio 6 (pendiente de implementación).'
+    resultados = {
+        'grafico_media': e6.generar_grafico_media_tiempo(),
+        'grafico_boxplot': e6.generar_boxplot_tipos_incidente(),
+        'clientes_criticos': e6.generar_grafico_clientes_criticos(),
+        'actuaciones_empleado': e6.generar_grafico_actuaciones_empleados(),
+        'actuaciones_diarias': e6.generar_grafico_actuaciones_diarias()
     }
+    return resultados
+
 
 # Ruta principal
 @app.route('/')
@@ -248,22 +254,22 @@ def index():
     return render_template('index.html')
 
 # Ruta para el Ejercicio 4
-@app.route('/ejercicio4')
+@app.route('/ejercicio2')
 def ejercicio1():
     resultados = obtener_resultados_ejercicio_4()
-    return render_template('ejercicio4.html', resultados=resultados)
+    return render_template('ejercicio2.html', resultados=resultados)
 
 # Ruta para el Ejercicio 5
-@app.route('/ejercicio5')
+@app.route('/ejercicio3')
 def ejercicio2():
     resultados = obtener_resultados_ejercicio_5()
-    return render_template('ejercicio5.html', resultados=resultados)
+    return render_template('ejercicio3.html', resultados=resultados)
 
 # Ruta para el Ejercicio 6
-@app.route('/ejercicio6')
+@app.route('/ejercicio4')
 def ejercicio3():
-    resultados = obtener_resultados_ejercicio_6()
-    return render_template('ejercicio6.html', resultados=resultados)
+    obtener_resultados_ejercicio_6()
+    return render_template('ejercicio4.html')
 
 # Ejecutar la aplicación
 if __name__ == '__main__':
