@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 4</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .resultado {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .boton {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .boton:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Resultados del Ejercicio 4</h1>
+
+
+
+    <div class="resultado">
+        <strong>Grafico 1:</strong>
+        <br>
+        <img src="{{ url_for('static', filename='tiempo_medio_mantenimiento.png') }}"
+         alt="Media de tiempo por mantenimiento"
+         style="max-width: 800px; margin: 20px;">
+    </div>
+
+    <div class="resultado">
+        <strong>Grafico 2:</strong>
+        <br>
+        <img src="{{ url_for('static', filename='boxplot_tipos.png') }}"
+             alt="Tipos grafico boxplot"
+             style="max-width: 800px; margin: 20px;">
+    </div>
+
+    <div class="resultado">
+        <strong>Grafico 3:</strong>
+        <br>
+        <img src="{{ url_for('static', filename='clientes_criticos.png') }}"
+             alt="Clientes mas críticos"
+             style="max-width: 800px; margin: 20px;">
+    </div>
+
+    <div class="resultado">
+        <strong>Grafico 4:</strong>
+        <br>
+        <img src="{{ url_for('static', filename='actuaciones_empleados.png') }}"
+             alt="Actuaciones por empleado"
+             style="max-width: 1000px; margin: 20px;">
+    </div>
+
+    <div class="resultado">
+        <strong>Grafico 5:</strong>
+        <br>
+        <img src="{{ url_for('static', filename='actuaciones_diarias.png') }}"
+             alt="Actuaciones diarias por cliente"
+             style="max-width: 800px; margin: 20px;">
+    </div>
+
+
+    <a href="/" class="boton">Volver al Inicio</a>
+</body>
+</html>
