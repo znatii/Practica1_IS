@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ejercicio 4 </title>
+    <title>Ejercicio 4</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -36,57 +36,48 @@
 <body>
     <h1>Resultados del Ejercicio 4</h1>
 
+
+
     <div class="resultado">
-        <strong>Número de muestras totales:</strong> {{ resultados.total_muestras }}
+        <strong>Grafico 1:</strong>
+        <br>
+        <img src="{{ url_for('static', filename='tiempo_medio_mantenimiento.png') }}"
+         alt="Media de tiempo por mantenimiento"
+         style="max-width: 800px; margin: 20px;">
     </div>
 
     <div class="resultado">
-        <strong>Media de satisfacción (>= 5):</strong> {{ resultados.media_satisfaccion }}
+        <strong>Grafico 2:</strong>
+        <br>
+        <img src="{{ url_for('static', filename='boxplot_tipos.png') }}"
+             alt="Tipos grafico boxplot"
+             style="max-width: 800px; margin: 20px;">
     </div>
 
     <div class="resultado">
-        <strong>Desviación estándar de satisfacción (>= 5):</strong> {{ resultados.std_satisfaccion }}
+        <strong>Grafico 3:</strong>
+        <br>
+        <img src="{{ url_for('static', filename='clientes_criticos.png') }}"
+             alt="Clientes mas críticos"
+             style="max-width: 800px; margin: 20px;">
     </div>
 
     <div class="resultado">
-        <strong>Media de incidentes por cliente:</strong> {{ resultados.media_incidentes_por_cliente }}
+        <strong>Grafico 4:</strong>
+        <br>
+        <img src="{{ url_for('static', filename='actuaciones_empleados.png') }}"
+             alt="Actuaciones por empleado"
+             style="max-width: 1000px; margin: 20px;">
     </div>
 
     <div class="resultado">
-        <strong>Desviación estándar de incidentes por cliente:</strong> {{ resultados.std_incidentes_por_cliente }}
+        <strong>Grafico 5:</strong>
+        <br>
+        <img src="{{ url_for('static', filename='actuaciones_diarias.png') }}"
+             alt="Actuaciones diarias por cliente"
+             style="max-width: 800px; margin: 20px;">
     </div>
 
-    <div class="resultado">
-        <strong>Media de horas por incidente:</strong> {{ resultados.media_horas_por_incidente }}
-    </div>
-
-    <div class="resultado">
-        <strong>Desviación estándar de horas por incidente:</strong> {{ resultados.std_horas_por_incidente }}
-    </div>
-
-    <div class="resultado">
-        <strong>Mínimo de horas realizadas por empleados:</strong> {{ resultados.min_horas_empleados }}
-    </div>
-
-    <div class="resultado">
-        <strong>Máximo de horas realizadas por empleados:</strong> {{ resultados.max_horas_empleados }}
-    </div>
-
-    <div class="resultado">
-        <strong>Mínimo de horas entre apertura y cierre:</strong> {{ resultados.min_tiempo_apertura_cierre }}
-    </div>
-
-    <div class="resultado">
-        <strong>Máximo de horas entre apertura y cierre:</strong> {{ resultados.max_tiempo_apertura_cierre }}
-    </div>
-
-    <div class="resultado">
-        <strong>Mínimo de incidentes atendidos por empleado:</strong> {{ resultados.min_incidentes_por_empleado }}
-    </div>
-
-    <div class="resultado">
-        <strong>Máximo de incidentes atendidos por empleado:</strong> {{ resultados.max_incidentes_por_empleado }}
-    </div>
 
     <a href="/" class="boton">Volver al Inicio</a>
 </body>
